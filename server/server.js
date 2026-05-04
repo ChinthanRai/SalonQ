@@ -8,6 +8,19 @@ import serviceRoutes from "./routes/serviceRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import Booking from "./models/Booking.js";
 import { sendEmail } from "./utils/sendEmail.js";
+import express from "express";
+import authRoutes from "./routes/authRoutes.js";
+
+const app = express();
+
+app.use(express.json());
+
+// ✅ THIS IS THE KEY LINE
+app.use("/api/auth", authRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Server running`);
+});
 
 dotenv.config();
 const app = express();
