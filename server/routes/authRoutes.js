@@ -22,7 +22,7 @@ router.post("/register", async (req, res) => {
     await sendEmail({
       to: email,
       subject: "Test Email",
-      text: "Your OTP is 123456"
+      html: `<h2>Your OTP is 123456</h2>`
     });
 
     console.log("📧 Email function called");
@@ -35,24 +35,48 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    const { name, email, password } = req.body;
 
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(400).json({ message: "Invalid credentials" });
+    console.log("🔥 Register route hit:", email);
 
-    const token = generateToken(user._id, user.role);
-    res.json({
-      token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role }
+    // check if user exists
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    // hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // save user with OTP
+    user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      otp,
     });
+
+    // send email
+    await sendEmail({
+      to: email,
+      subject: "OTP Verification",
+      html: `<h2>Your OTP is ${otp}</h2>`
+    });
+
+    console.log("📧 Email sent");
+
+    res.json({
+      success: true,
+      message: "OTP sent to your email",
+    });
+
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.error("❌ Register error:", err);
+    res.status(500).json({ error: "Registration failed" });
   }
 });
-
-export default router;
