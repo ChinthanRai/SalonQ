@@ -21,7 +21,7 @@ const Register = () => {
     console.log("Form data:", form);
     
     try {
-      const response = await api.post("/api/auth/register", form);
+      const response = await api.post("/auth/register", form);
       console.log("Registration response:", response);
       
       // Check if response has the expected structure
