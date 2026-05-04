@@ -80,3 +80,5 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ error: "Registration failed" });
   }
 });
+
+export default router;
