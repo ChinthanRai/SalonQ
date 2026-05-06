@@ -13,7 +13,7 @@ import { sendEmail } from "../utils/sendEmail.js";
 
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     console.log("🔥 Register route hit:", email);
 
@@ -35,6 +35,7 @@ router.post("/register", async (req, res) => {
       email,
       password: hashedPassword,
       otp,
+      role: role || "customer"
     });
 
     // send email
@@ -46,14 +47,62 @@ router.post("/register", async (req, res) => {
 
     console.log("📧 Email sent");
 
+    // generate token
+    const token = generateToken(user._id, user.role);
+
     res.json({
       success: true,
-      message: "OTP sent to your email",
+      message: "Registration successful. Welcome email sent.",
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
     });
 
   } catch (err) {
     console.error("❌ Register error:", err);
     res.status(500).json({ error: "Registration failed" });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    console.log("🔥 Login route hit:", email);
+
+    // check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // check password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // generate token
+    const token = generateToken(user._id, user.role || "customer");
+
+    res.json({
+      success: true,
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role || "customer"
+      }
+    });
+
+  } catch (err) {
+    console.error("❌ Login error:", err);
+    res.status(500).json({ message: "Server error during login" });
   }
 });
 
