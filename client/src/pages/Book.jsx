@@ -44,10 +44,13 @@ const Book = () => {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
+  const [loading, setLoading] = useState(false);
+
   const createBooking = async (e) => {
     e.preventDefault();
     setError("");
     setMsg("");
+    setLoading(true);
     try {
       const { data } = await api.post("/bookings", form);
       setBookingId(data.bookingId);
@@ -55,6 +58,8 @@ const Book = () => {
       setMsg(data.message);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to create booking");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -124,8 +129,8 @@ const Book = () => {
               required
             />
           </label>
-          <button className="btn-primary" type="submit">
-            Create Booking
+          <button className="btn-primary" type="submit" disabled={loading}>
+            {loading ? "Creating..." : "Create Booking"}
           </button>
         </form>
       )}

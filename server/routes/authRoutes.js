@@ -39,7 +39,7 @@ router.post("/register", async (req, res) => {
     });
 
     // send email
-    await sendEmail({
+    sendEmail({
       to: email,
       subject: "OTP Verification",
       html: `<h2>Your OTP is ${otp}</h2>`

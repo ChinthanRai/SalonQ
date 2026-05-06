@@ -69,19 +69,15 @@ router.post("/", protect, async (req, res) => {
       otpExpiresAt
     });
 
-    // Send email notification (won't break the flow if it fails)
-    const emailResult = await sendEmail({
+    // Send email notification (fire and forget)
+    sendEmail({
       to: user.email,
       subject: "Your Salon Booking OTP",
       html: `<p>Your OTP for booking on ${date} at ${timeSlotStart} is <b>${otp}</b>. It expires in 10 minutes.</p>`
     });
 
-    const message = emailResult.success 
-      ? "Booking created, OTP sent to email" 
-      : "Booking created. Note: Failed to send OTP email. Please contact admin.";
-
     res.status(201).json({ 
-      message, 
+      message: "Booking created, OTP sent to email", 
       bookingId: booking._id
     });
   } catch (err) {
