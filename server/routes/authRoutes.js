@@ -10,30 +10,6 @@ const generateToken = (id, role) => {
 };
 
 import { sendEmail } from "../utils/sendEmail.js";
-router.post("/register", async (req, res) => {
-  try {
-    const { email } = req.body;
-
-    // create user logic...
-
-    console.log("🚀 Register route hit");
-
-    // 👉 ADD THIS
-    await sendEmail({
-      to: email,
-      subject: "Test Email",
-      html: `<h2>Your OTP is 123456</h2>`
-    });
-
-    console.log("📧 Email function called");
-
-    res.json({ success: true });
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Registration failed" });
-  }
-});
 
 router.post("/register", async (req, res) => {
   try {
