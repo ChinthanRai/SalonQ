@@ -9,7 +9,7 @@ import serviceRoutes from "./routes/serviceRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 
 // DB
-import connectDB from "./config/db.js";
+import { connectDB } from "./config/db.js";
 
 // Models (for scheduler)
 import Booking from "./models/Booking.js";
