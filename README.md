@@ -157,7 +157,6 @@ salon-queue-mern/
 ## 👨‍💻 Author
 
 **Chinthan Rai Kukkuvalli**  
-MCA Student
 
 ---
 *If you like this project or find it helpful, please consider giving it a ⭐!*
