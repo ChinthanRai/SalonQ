@@ -7,9 +7,8 @@
 
 <div align="center">
   <h3>
-    🔴 <strong><a href="YOUR_HOSTED_APP_URL_HERE">View Live Demo Here</a></strong> 🔴
+    🔴 <strong><a href="https://salon-q-eight.vercel.app">View Live Demo Here</a></strong> 🔴
   </h3>
-  <p><em>(Please replace the URL above with your actual deployed website link)</em></p>
 </div>
 
 SalonQ is a robust, full-stack MERN application designed to modernize and streamline salon operations. It eliminates the hassle of traditional walk-in queues by offering a seamless online appointment booking system combined with real-time queue management for both customers and salon administrators.
